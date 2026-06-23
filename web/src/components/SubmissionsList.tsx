@@ -25,7 +25,7 @@ export function SubmissionsList({
     <Card>
       <CardHeader
         title="Submissions"
-        subtitle="All submissions are judged together after the deadline."
+        subtitle="Hashes during the commit phase; answers appear only after each participant reveals."
         action={<Badge tone="zinc">{count}</Badge>}
       />
       <CardBody className="space-y-3">
@@ -70,8 +70,11 @@ function SubmissionRow({
     query: { enabled: !!contractAddress },
   });
 
+  // getSubmission -> [submitter, commitment, revealed, answer]
   const submitter = data?.[0];
-  const answer = data?.[1];
+  const commitment = data?.[1];
+  const revealed = data?.[2];
+  const answer = data?.[3];
 
   return (
     <div
@@ -91,6 +94,11 @@ function SubmissionRow({
           </span>
         </div>
         <div className="flex items-center gap-1.5">
+          {revealed ? (
+            <Badge tone="green">Revealed</Badge>
+          ) : (
+            <Badge tone="amber">Committed</Badge>
+          )}
           {ranking ? <Badge tone="zinc">score {ranking.score}</Badge> : null}
           {isWinner ? (
             <Badge tone="green">Winner</Badge>
@@ -100,9 +108,16 @@ function SubmissionRow({
         </div>
       </div>
 
-      <p className="mt-2 whitespace-pre-wrap break-words text-sm text-zinc-200">
-        {answer ?? (isLoading ? "" : "-")}
-      </p>
+      {revealed ? (
+        <p className="mt-2 whitespace-pre-wrap break-words text-sm text-zinc-200">
+          {answer ?? (isLoading ? "" : "-")}
+        </p>
+      ) : (
+        <p className="mt-2 break-all font-mono text-xs text-zinc-500">
+          <span className="text-zinc-600">commitment </span>
+          {commitment ?? (isLoading ? "loading…" : "-")}
+        </p>
+      )}
 
       {ranking?.reason ? (
         <p className="mt-2 border-t border-white/5 pt-2 text-xs text-zinc-400">
