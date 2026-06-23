@@ -1,17 +1,11 @@
 import { describe, it, before, beforeEach } from "node:test";
 import assert from "node:assert/strict";
 import { network } from "hardhat";
-import {
-  parseEther,
-  keccak256,
-  encodeAbiParameters,
-  toHex,
-  getAddress,
-} from "viem";
+import { parseEther, keccak256, encodePacked, toHex, getAddress } from "viem";
 
 const { viem } = await network.connect();
 
-// commitment = keccak256(abi.encode(answer, salt, submitter, bountyId))
+// commitment = keccak256(abi.encodePacked(answer, salt, submitter, bountyId))
 function commitmentOf(
   answer: string,
   salt: `0x${string}`,
@@ -19,8 +13,8 @@ function commitmentOf(
   bountyId: bigint,
 ) {
   return keccak256(
-    encodeAbiParameters(
-      [{ type: "string" }, { type: "bytes32" }, { type: "address" }, { type: "uint256" }],
+    encodePacked(
+      ["string", "bytes32", "address", "uint256"],
       [answer, salt, getAddress(submitter), bountyId],
     ),
   );

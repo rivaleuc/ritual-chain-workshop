@@ -91,9 +91,53 @@ Goal: answers stay encrypted (not just hashed) and are never public, even after 
 - **Where plaintext exists:** only transiently inside the TEE during the judging call. It is never
   written back in plaintext; the stored output is the AI review (scores/ranking), and raw answers
   stay encrypted at rest.
-- **Why TEE over plain commit-reveal:** commit-reveal makes answers public after the deadline; the
-  TEE flow keeps them confidential end to end, which matters for bounties whose answers have value
-  beyond the contest (e.g. exploit reports, proprietary solutions).
+- **Final reveal (no large plaintext on-chain):** after judging, the TEE writes a single revealed
+  answers bundle to DA and the contract stores only `revealedAnswersRef` (where the bundle lives)
+  and `revealedAnswersHash` (`keccak256` of the bundle). Anyone can fetch the bundle and re-hash it
+  to verify it matches what was judged. We never put 10 long answers in contract storage; we commit
+  to them with one 32-byte hash.
+- **What the contract verifies:** on `judgeAll` the contract records `revealedAnswersHash` and the
+  AI review; on `finalizeWinner` the owner ratifies `winnerIndex`. The chain commits to the bundle
+  (hash) and the outcome; it never holds the plaintext.
+
+**Private submission flow:**
+
+```
+participant            DA (HF/IPFS)            chain                 TEE executor
+    |  encrypt(answer)      |                    |                        |
+    |---- ciphertext ------>|                    |                        |
+    |---- commitment + storageRef -------------->| submitEncrypted        |
+    |                       |                    |                        |
+   (judge)                  |   judgeAll(bountyId) ------------------------>| read ciphertexts
+    |                       |<------- decrypt inside enclave --------------| (DKMS priv key)
+    |                       |                    |   batch prompt -> LLM   |
+    |                       |   write bundle ---->|                        |
+    |                       |   ref + hash + review --------------------->| onResult
+```
+
+**Example final output shape:**
+
+```json
+{
+  "winnerIndex": 2,
+  "ranking": [{ "index": 2, "score": 94, "reason": "Best satisfies the rubric." }],
+  "revealedAnswersRef": "ipfs://… or storage-ref://…",
+  "revealedAnswersHash": "0x…",
+  "summary": "Submission 2 is the strongest answer."
+}
+```
+
+### Commit-reveal vs Ritual-native — comparison
+
+| | Commit-reveal (Required) | Ritual-native TEE (Advanced) |
+|---|---|---|
+| Hidden during submission | Yes (hash only) | Yes (ciphertext) |
+| Hidden during judging | No (revealed first, public) | Yes (decrypted only in enclave) |
+| Public after judging | Yes (on-chain plaintext) | Optional (publish bundle ref + hash) |
+| Chain dependency | Any EVM chain | Ritual (TEE + DKMS + LLM precompile) |
+| Trust model | Chain enforces timing + hash | Plus trust in TEE attestation |
+| Best for | Open contests, simple + portable | Answers with lasting value (exploits, IP) |
+| Cost | Plaintext on-chain after reveal | One 32-byte hash + off-chain bundle |
 
 ## Reflection
 

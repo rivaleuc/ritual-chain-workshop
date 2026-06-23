@@ -32,7 +32,7 @@ contract AIJudge is PrecompileConsumer {
 
     struct Submission {
         address submitter;
-        bytes32 commitment; // keccak256(abi.encode(answer, salt, submitter, bountyId))
+        bytes32 commitment; // keccak256(abi.encodePacked(answer, salt, submitter, bountyId))
         bool revealed;
         string answer; // empty until revealed
     }
@@ -164,7 +164,7 @@ contract AIJudge is PrecompileConsumer {
     }
 
     /// @notice Phase 2: reveal the answer + salt after the submission deadline.
-    /// @dev Verifies keccak256(abi.encode(answer, salt, msg.sender, bountyId)) == commitment.
+    /// @dev Verifies keccak256(abi.encodePacked(answer, salt, msg.sender, bountyId)) == commitment.
     function revealAnswer(
         uint256 bountyId,
         string calldata answer,
@@ -184,7 +184,7 @@ contract AIJudge is PrecompileConsumer {
         require(!submission.revealed, "already revealed");
 
         bytes32 expected = keccak256(
-            abi.encode(answer, salt, msg.sender, bountyId)
+            abi.encodePacked(answer, salt, msg.sender, bountyId)
         );
         require(expected == submission.commitment, "commitment mismatch");
 

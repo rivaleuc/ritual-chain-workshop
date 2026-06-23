@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useAccount } from "wagmi";
-import { keccak256, encodeAbiParameters, toHex, type Address } from "viem";
+import { keccak256, encodePacked, toHex, type Address } from "viem";
 import { useNow } from "@/hooks/useNow";
 import aiJudgeAbi from "@/abi/AIJudge";
 import { contractAddress } from "@/config/contract";
@@ -36,7 +36,7 @@ function loadStored(bountyId: bigint, addr: Address): Stored | null {
   }
 }
 
-/** commitment = keccak256(abi.encode(answer, salt, submitter, bountyId)) — matches the contract. */
+/** commitment = keccak256(abi.encodePacked(answer, salt, submitter, bountyId)) — matches the contract. */
 function computeCommitment(
   answer: string,
   salt: `0x${string}`,
@@ -44,13 +44,8 @@ function computeCommitment(
   bountyId: bigint,
 ) {
   return keccak256(
-    encodeAbiParameters(
-      [
-        { type: "string" },
-        { type: "bytes32" },
-        { type: "address" },
-        { type: "uint256" },
-      ],
+    encodePacked(
+      ["string", "bytes32", "address", "uint256"],
       [answer, salt, submitter, bountyId],
     ),
   );
