@@ -47,6 +47,12 @@ The commit-reveal contract is deployed and verified live on Ritual testnet (chai
 `AIJudge` at `0x09d9973048fdc9b8d9dd04575d25093df798b121` (commit → answer hidden, reveal →
 answer revealed, confirmed on-chain).
 
+The advanced-track `AIJudgeTEE` is also deployed and verified live on Ritual (chain 1979) at
+`0x8fb50452524fda4284b17b793d519a90fdd72b5d`: deploy → `submitEncrypted` (commitment + ciphertext
+ref only, no plaintext) → `judgeAll` (one batched TEE LLM call, GLM-4.7-FP8 returned
+`{"winnerIndex": 0, "summary": "ok"}`) → `finalizeWinner`, all confirmed on-chain. See
+`hardhat/scripts/deploy-tee-demo.mjs`.
+
 > Note: Ritual `block.timestamp` is in **milliseconds**, so deadlines (contract and frontend) use
 > millisecond timestamps, not seconds.
 

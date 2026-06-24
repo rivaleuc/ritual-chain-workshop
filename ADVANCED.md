@@ -4,6 +4,15 @@ This track keeps answers **encrypted end to end**: unlike commit-reveal, no plai
 ever published on-chain, not even after judging. It is **implemented** as a separate contract,
 `hardhat/contracts/AIJudgeTEE.sol`, plus the off-chain TEE flow described here.
 
+## Live deployment (chain 1979)
+
+`AIJudgeTEE` is deployed and exercised end-to-end live on Ritual at
+`0x8fb50452524fda4284b17b793d519a90fdd72b5d`: deploy → `submitEncrypted` (only a commitment + a
+`hf:` ciphertext ref on-chain, no plaintext) → `judgeAll` (one batched LLM call in the TEE;
+GLM-4.7-FP8 returned `{"winnerIndex": 0, "summary": "ok"}`; the contract stored the review plus the
+`revealedAnswersRef` + `revealedAnswersHash` bundle commitment) → `finalizeWinner`. Reproduce with
+`hardhat/scripts/deploy-tee-demo.mjs` (executor `0xB42e…c91B`).
+
 ## Flow
 
 ```
