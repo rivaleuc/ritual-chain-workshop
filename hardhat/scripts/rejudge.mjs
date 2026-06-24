@@ -20,7 +20,7 @@ const C = "0x09d9973048fdc9b8d9dd04575d25093df798b121";
 const RITUAL_WALLET = "0x532F0dF0896F353d8C3DD8cc134e8129DA2a3948";
 const EXECUTOR = process.env.EXECUTOR ?? "0xB42e435c4252A5a2E7440e37B609F00c61a0c91B"; // valid LLM executor (TEEServiceRegistry cap=1)
 const BOUNTY_ID = BigInt(process.env.BOUNTY_ID ?? "2");
-const DEPOSIT_RIT = process.env.DEPOSIT_RIT ?? "0.5"; // >= 0.4 recommended; ~0.31 escrow/in-flight call
+const DEPOSIT_RIT = process.env.DEPOSIT_RIT ?? "0.4"; // fits 0.48 native; lifts wallet 0.05 -> 0.45 (>0.31 escrow)
 
 const ritual = defineChain({ id: 1979, name: "Ritual", nativeCurrency: { name: "Ritual", symbol: "RIT", decimals: 18 }, rpcUrls: { default: { http: ["https://rpc.ritualfoundation.org"] } } });
 if (!process.env.PRIVATE_KEY) throw new Error("set PRIVATE_KEY (owner of bounty)");
