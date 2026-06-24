@@ -95,6 +95,27 @@ store one ciphertext reference per submission and one 32-byte hash for the final
 }
 ```
 
+## Private judging — keeping answers out of calldata
+
+The first live demo exposed a real gap: building the judge prompt with answers inline put the
+answer plaintext into the `judgeAll` calldata (public on-chain). The fix keeps answers off-chain:
+
+- **On-chain calldata** (`judgeAll` → LLM precompile) carries only the rubric (public), a generic
+  "judge the submissions in the attached history" instruction, the `convoHistory` StorageRef, and
+  the DA credential **ECIES-encrypted to the executor's public key** in `encryptedSecrets`. No answer.
+- **Off-chain (DA)**: the answers live as a JSONL bundle in hf/gcs/pinata. The executor decrypts the
+  credential inside the TEE, loads the bundle as conversation context, and judges all answers in one
+  batched inference.
+
+`hardhat/scripts/encode-private-judge.mjs` builds this request and **self-verifies** that the encoded
+calldata contains zero answer plaintext (the inline version leaks it; the private version does not —
+run `node scripts/encode-private-judge.mjs`).
+
+Honest limitation: Ritual's LLM `convoHistory` is stored as **plaintext JSONL** off-chain (only the
+access credential is encrypted, to the enclave), so this gives *off-chain + TEE-gated access*, not
+*encryption at rest*. For answers that must stay ciphertext even at rest through judging, the FHE
+precompile (`0x0807`) is the path — a larger build noted as future work.
+
 ## Test plan (advanced track)
 
 `hardhat/test/AIJudgeTEE.ts` (16 cases, all passing with `npx hardhat test`). The LLM precompile
