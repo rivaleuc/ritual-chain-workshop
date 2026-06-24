@@ -19,7 +19,7 @@ createBounty ──► COMMIT phase ──► REVEAL phase ──► JUDGE ─�
 1. **Create** — `createBounty(title, rubric, submissionDeadline, revealDeadline)` escrows the
    reward (`msg.value`) and sets the two deadlines (`submission < reveal`).
 2. **Commit** (`now < submissionDeadline`) — `submitCommitment(bountyId, commitment)` where
-   `commitment = keccak256(abi.encode(answer, salt, msg.sender, bountyId))`. Only the hash is
+   `commitment = keccak256(abi.encodePacked(answer, salt, msg.sender, bountyId))`. Only the hash is
    on-chain. One commitment per address.
 3. **Reveal** (`submissionDeadline <= now < revealDeadline`) — `revealAnswer(bountyId, answer, salt)`.
    The contract recomputes the hash and requires it to equal the stored commitment. Binding the
