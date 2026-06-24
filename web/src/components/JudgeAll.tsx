@@ -47,16 +47,21 @@ export function JudgeAll({
     setGatherError(null);
     setGathering(true);
     try {
-      // 1–2. Load every submission for this bounty.
+      // 1–2. Load every submission. Only REVEALED answers are eligible for judging
+      //       (unrevealed submissions carry an empty answer and are skipped).
       const submissions: JudgeSubmission[] = [];
       for (let i = 0; i < count; i++) {
-        const [submitter, answer] = await publicClient.readContract({
+        // getSubmission -> [submitter, commitment, revealed, answer]
+        const [submitter, , revealed, answer] = await publicClient.readContract({
           address: contractAddress,
           abi: aiJudgeAbi,
           functionName: "getSubmission",
           args: [bountyId, BigInt(i)],
         });
-        submissions.push({ index: i, submitter, answer });
+        if (revealed) submissions.push({ index: i, submitter, answer });
+      }
+      if (submissions.length === 0) {
+        throw new Error("No revealed answers to judge yet.");
       }
 
       // 3–4. Build the batch judging prompt and encode the Ritual LLM request.
