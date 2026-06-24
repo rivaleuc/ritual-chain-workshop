@@ -1,4 +1,4 @@
-# Privacy-Preserving AI Bounty Judge — Submission
+# Privacy-Preserving AI Bounty Judge Submission
 
 Extends the workshop app so submissions stay hidden until judging. The public-answer flaw is
 replaced with a **commit-reveal** flow (Required Track) and a **Ritual-native TEE** design that is
