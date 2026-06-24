@@ -86,6 +86,22 @@ store one ciphertext reference per submission and one 32-byte hash for the final
 }
 ```
 
+## Test plan (advanced track)
+
+`hardhat/test/AIJudgeTEE.ts` (16 cases, all passing with `npx hardhat test`). The LLM precompile
+(`0x0802`) is mocked locally via `hardhat_setCode` (`contracts/test/MockLLM.sol`) so the batch-judge
+path runs without a live executor. Cases:
+
+- **Encrypted submit:** stores only a commitment + ciphertext `StorageRef`, never plaintext
+  (privacy invariant — `getSubmission` exposes no answer field); rejects empty commitment; rejects
+  empty ciphertext ref; rejects a second submission per address; rejects submitting after the deadline.
+- **Batch judging (TEE):** judges all submissions in **one** call and records the AI review plus the
+  `revealedAnswersRef` + `revealedAnswersHash` bundle commitment; rejects judging before the deadline;
+  rejects judging with no submissions; rejects a non-owner; bubbles up an LLM error envelope
+  (`hasError=true`); rejects judging twice.
+- **Finalize (human-in-the-loop):** rejects finalize before judging; rejects an out-of-range winner;
+  rejects a non-owner; pays the winning submitter and closes the bounty; rejects finalizing twice.
+
 ## Commit-reveal vs Ritual-native (summary)
 
 | | Commit-reveal (Required) | Ritual-native TEE (Advanced) |

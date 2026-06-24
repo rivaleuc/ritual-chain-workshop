@@ -28,14 +28,15 @@ createBounty ──► COMMIT (hash only) ──► REVEAL (answer+salt) ──�
 | Updated Solidity contract (commit-reveal) | [`hardhat/contracts/AIJudge.sol`](hardhat/contracts/AIJudge.sol) |
 | Advanced track contract (encrypted, TEE) | [`hardhat/contracts/AIJudgeTEE.sol`](hardhat/contracts/AIJudgeTEE.sol) |
 | README explaining the lifecycle | this file + [`SUBMISSION.md`](SUBMISSION.md) |
-| Test plan for reveal cases (11 cases) | [`hardhat/test/AIJudge.ts`](hardhat/test/AIJudge.ts) |
+| Test plan — commit-reveal reveal cases (11) | [`hardhat/test/AIJudge.ts`](hardhat/test/AIJudge.ts) |
+| Test plan — advanced TEE cases (16) | [`hardhat/test/AIJudgeTEE.ts`](hardhat/test/AIJudgeTEE.ts) |
 | Architecture note (commit-reveal vs Ritual-native) | [`SUBMISSION.md`](SUBMISSION.md) + [`ADVANCED.md`](ADVANCED.md) |
 | Reflection answer (5-8 sentences) | [`SUBMISSION.md`](SUBMISSION.md) |
 
 ## Run it
 
 ```bash
-# Contract: compile + tests (11 reveal cases)
+# Contract: compile + tests (27 passing: 11 commit-reveal + 16 TEE advanced)
 cd hardhat && pnpm install && npx hardhat test
 
 # Frontend

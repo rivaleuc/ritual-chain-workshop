@@ -61,6 +61,12 @@ createBounty ──► COMMIT phase ──► REVEAL phase ──► JUDGE ─�
 (The live LLM step in `judgeAll` runs against Ritual's `0x0802` precompile on chain 1979; locally
 we test every guard up to that call.)
 
+The advanced track has its own suite, `hardhat/test/AIJudgeTEE.ts` (16 cases), covering encrypted
+submit, one-call batch judging, and finalize — the LLM precompile is mocked locally via
+`hardhat_setCode` so the judge path runs end-to-end. Full suite: **27 passing** (`npx hardhat test`).
+The full commit→reveal→judge→finalize loop is also verified live on Ritual (bounty 2): GLM-4.7-FP8
+returned `{"winnerIndex": 0, "summary": "ok"}` and the winner was finalized on-chain.
+
 ## Architecture note
 
 ### Required track (commit-reveal) — what is public vs hidden
