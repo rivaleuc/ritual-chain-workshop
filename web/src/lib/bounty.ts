@@ -66,14 +66,12 @@ export type BountyStatus =
   | "judged"
   | "finalized";
 
-export function getBountyStatus(
-  b: Bounty,
-  nowSeconds = Date.now() / 1000,
-): BountyStatus {
+// Ritual block timestamps are in milliseconds, so compare against Date.now() (ms).
+export function getBountyStatus(b: Bounty, nowMs = Date.now()): BountyStatus {
   if (b.finalized) return "finalized";
   if (b.judged) return "judged";
-  if (nowSeconds < Number(b.submissionDeadline)) return "commit";
-  if (nowSeconds < Number(b.revealDeadline)) return "reveal";
+  if (nowMs < Number(b.submissionDeadline)) return "commit";
+  if (nowMs < Number(b.revealDeadline)) return "reveal";
   return "ready";
 }
 
@@ -88,17 +86,17 @@ export const STATUS_META: Record<
   finalized: { label: "Finalized", tone: "zinc" },
 };
 
-/** Commit phase: participants can submit commitment hashes. */
-export function canCommit(b: Bounty, nowSeconds = Date.now() / 1000): boolean {
-  return !b.judged && !b.finalized && Number(b.submissionDeadline) > nowSeconds;
+/** Commit phase: participants can submit commitment hashes. (ms timestamps) */
+export function canCommit(b: Bounty, nowMs = Date.now()): boolean {
+  return !b.judged && !b.finalized && Number(b.submissionDeadline) > nowMs;
 }
 
-/** Reveal phase: participants reveal their answer + salt. */
-export function canReveal(b: Bounty, nowSeconds = Date.now() / 1000): boolean {
+/** Reveal phase: participants reveal their answer + salt. (ms timestamps) */
+export function canReveal(b: Bounty, nowMs = Date.now()): boolean {
   return (
     !b.judged &&
     !b.finalized &&
-    Number(b.submissionDeadline) <= nowSeconds &&
-    Number(b.revealDeadline) > nowSeconds
+    Number(b.submissionDeadline) <= nowMs &&
+    Number(b.revealDeadline) > nowMs
   );
 }

@@ -69,8 +69,8 @@ export function SubmitAnswer({
   const { address, isConnected } = useAccount();
   const now = useNow();
 
-  const commitPhase = canCommit(bounty, now / 1000);
-  const revealPhase = canReveal(bounty, now / 1000);
+  const commitPhase = canCommit(bounty, now);
+  const revealPhase = canReveal(bounty, now);
   if (!commitPhase && !revealPhase) return null;
 
   return commitPhase ? (
