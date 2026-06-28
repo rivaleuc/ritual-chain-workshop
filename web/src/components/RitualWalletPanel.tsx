@@ -43,7 +43,7 @@ export function RitualWalletPanel({
   // Loading the three reads — show a neutral placeholder, don't block.
   if (!status.hasData) {
     return (
-      <div className="flex items-center gap-2 text-xs text-zinc-500">
+      <div className="flex items-center gap-2 text-xs text-[var(--muted-2)]">
         <Spinner /> Checking RitualWallet funding…
       </div>
     );
@@ -63,7 +63,7 @@ export function RitualWalletPanel({
   return (
     <div className="space-y-3">
       <div className="flex items-center justify-between gap-2">
-        <span className="text-[11px] uppercase tracking-wide text-zinc-500">LLM fees</span>
+        <span className="text-[11px] uppercase tracking-wide text-[var(--muted-2)]">LLM fees</span>
         {badge}
       </div>
 

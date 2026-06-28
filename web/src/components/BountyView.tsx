@@ -25,7 +25,7 @@ export function BountyView({ bountyId }: { bountyId: bigint }) {
     return (
       <Card>
         <CardBody>
-          <div className="flex items-center gap-2 text-sm text-zinc-400">
+          <div className="flex items-center gap-2 text-sm text-[var(--muted)]">
             <Spinner /> Loading bounty #{bountyId.toString()}…
           </div>
         </CardBody>

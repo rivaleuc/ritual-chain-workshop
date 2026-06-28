@@ -30,7 +30,7 @@ export function SubmissionsList({
       />
       <CardBody className="space-y-3">
         {count === 0 ? (
-          <p className="text-sm text-zinc-500">No submissions yet.</p>
+          <p className="text-sm text-[var(--muted-2)]">No submissions yet.</p>
         ) : (
           indices.map((i) => (
             <SubmissionRow
@@ -83,13 +83,13 @@ function SubmissionRow({
           ? "border-emerald-500/40 bg-emerald-500/5"
           : recommended
             ? "border-indigo-500/40 bg-indigo-500/5"
-            : "border-white/10 bg-black/20"
+            : "border-[var(--border)] bg-[var(--surface-2)]"
       }`}
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <div className="flex items-center gap-2">
-          <span className="font-mono text-xs text-zinc-500">#{index}</span>
-          <span className="font-mono text-sm text-zinc-300">
+          <span className="font-mono text-xs text-[var(--muted-2)]">#{index}</span>
+          <span className="font-mono text-sm text-[var(--muted)]">
             {submitter ? shortenAddress(submitter) : isLoading ? "loading…" : "-"}
           </span>
         </div>
@@ -109,19 +109,19 @@ function SubmissionRow({
       </div>
 
       {revealed ? (
-        <p className="mt-2 whitespace-pre-wrap break-words text-sm text-zinc-200">
+        <p className="mt-2 whitespace-pre-wrap break-words text-sm text-[var(--foreground)]">
           {answer ?? (isLoading ? "" : "-")}
         </p>
       ) : (
-        <p className="mt-2 break-all font-mono text-xs text-zinc-500">
-          <span className="text-zinc-600">commitment </span>
+        <p className="mt-2 break-all font-mono text-xs text-[var(--muted-2)]">
+          <span className="text-[var(--muted-2)]">commitment </span>
           {commitment ?? (isLoading ? "loading…" : "-")}
         </p>
       )}
 
       {ranking?.reason ? (
-        <p className="mt-2 border-t border-white/5 pt-2 text-xs text-zinc-400">
-          <span className="text-zinc-500">AI: </span>
+        <p className="mt-2 border-t border-[var(--border)] pt-2 text-xs text-[var(--muted)]">
+          <span className="text-[var(--muted-2)]">AI: </span>
           {ranking.reason}
         </p>
       ) : null}

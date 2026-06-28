@@ -26,9 +26,9 @@ export function AIReviewDisplay({ aiReview }: { aiReview: `0x${string}` }) {
         {parsed ? (
           <>
             {parsed.ranking.length > 0 && (
-              <div className="overflow-hidden rounded-xl border border-white/10">
+              <div className="overflow-hidden rounded-xl border border-[var(--border)]">
                 <table className="w-full text-left text-sm">
-                  <thead className="bg-white/5 text-xs uppercase tracking-wide text-zinc-400">
+                  <thead className="bg-[var(--surface-2)] text-xs uppercase tracking-wide text-[var(--muted)]">
                     <tr>
                       <th className="px-3 py-2">#</th>
                       <th className="px-3 py-2">Score</th>
@@ -41,7 +41,7 @@ export function AIReviewDisplay({ aiReview }: { aiReview: `0x${string}` }) {
                       .map((r) => (
                         <tr
                           key={r.index}
-                          className={`border-t border-white/5 ${
+                          className={`border-t border-[var(--border)] ${
                             r.index === parsed.winnerIndex
                               ? "bg-indigo-500/10"
                               : ""
@@ -54,7 +54,7 @@ export function AIReviewDisplay({ aiReview }: { aiReview: `0x${string}` }) {
                             )}
                           </td>
                           <td className="px-3 py-2 font-medium">{r.score}</td>
-                          <td className="px-3 py-2 text-zinc-300">{r.reason}</td>
+                          <td className="px-3 py-2 text-[var(--muted)]">{r.reason}</td>
                         </tr>
                       ))}
                   </tbody>
@@ -63,8 +63,8 @@ export function AIReviewDisplay({ aiReview }: { aiReview: `0x${string}` }) {
             )}
 
             {parsed.summary && (
-              <div className="rounded-xl bg-black/20 px-3 py-2 text-sm text-zinc-200">
-                <span className="text-zinc-500">Summary: </span>
+              <div className="rounded-xl bg-[var(--surface-2)] px-3 py-2 text-sm text-[var(--foreground)]">
+                <span className="text-[var(--muted-2)]">Summary: </span>
                 {parsed.summary}
               </div>
             )}
@@ -74,7 +74,7 @@ export function AIReviewDisplay({ aiReview }: { aiReview: `0x${string}` }) {
             <Notice tone="amber">
               Couldn&apos;t parse the AI review as JSON. Showing the raw response.
             </Notice>
-            <pre className="max-h-72 overflow-auto rounded-xl bg-black/40 p-3 font-mono text-xs text-zinc-300 whitespace-pre-wrap break-words">
+            <pre className="max-h-72 overflow-auto rounded-xl bg-[var(--surface-2)] p-3 font-mono text-xs text-[var(--muted)] whitespace-pre-wrap break-words">
               {raw}
             </pre>
           </>

@@ -154,9 +154,9 @@ function CommitCard({
             {tx.isBusy ? "Committing…" : "Commit answer"}
           </Button>
           {!isConnected && (
-            <p className="text-xs text-zinc-500">Connect your wallet to commit.</p>
+            <p className="text-xs text-[var(--muted-2)]">Connect your wallet to commit.</p>
           )}
-          <p className="text-xs text-zinc-500">
+          <p className="text-xs text-[var(--muted-2)]">
             The answer and a random salt are saved locally so you can reveal after the
             submission deadline. Do not clear browser storage before revealing.
           </p>
@@ -228,7 +228,7 @@ function RevealCard({
               value={salt}
               onChange={(e) => setSalt(e.target.value)}
               placeholder="0x…"
-              className="w-full rounded-md border border-zinc-700 bg-zinc-900 px-3 py-2 font-mono text-sm text-zinc-200 outline-none focus:border-zinc-500"
+              className="w-full rounded-md border border-[var(--border-strong)] bg-[var(--surface)] px-3 py-2 font-mono text-sm text-[var(--foreground)] outline-none focus:border-[var(--border-strong)]"
             />
           </Field>
           <Button

@@ -56,9 +56,9 @@ export function WalletConnect() {
         {isPending ? "Connecting…" : "Connect Wallet"}
       </Button>
       {open && (
-        <div className="absolute right-0 z-20 mt-2 w-52 overflow-hidden rounded-xl border border-white/10 bg-zinc-900 shadow-xl">
+        <div className="absolute right-0 z-20 mt-2 w-52 overflow-hidden rounded-md border border-[var(--border-strong)] bg-[var(--surface)] shadow-lg shadow-black/40">
           {list.length === 0 && (
-            <div className="px-3 py-2 text-xs text-zinc-500">
+            <div className="px-3 py-2 text-xs font-medium text-[var(--muted-2)]">
               No wallet connectors found.
             </div>
           )}
@@ -69,7 +69,7 @@ export function WalletConnect() {
                 connect({ connector });
                 setOpen(false);
               }}
-              className="block w-full px-3 py-2 text-left text-sm text-zinc-200 hover:bg-white/10"
+              className="block w-full px-3 py-2 text-left text-sm font-medium text-[var(--foreground)] hover:bg-[var(--hover)]"
             >
               {connector.name}
             </button>

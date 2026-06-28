@@ -1,22 +1,134 @@
 @import "tailwindcss";
 
 :root {
-  --background: #09090b;
-  --foreground: #fafafa;
+  /* Light, institutional. Sky-tinted background, white cards. House default. */
+  --background: #eef3fb;
+  --surface: #ffffff;
+  --surface-2: #f3f6fc;
+  --border: #e2e8f1;
+  --border-strong: #d3dce8;
+  --foreground: #182230;
+  --muted: #56627a;
+  --muted-2: #8b96a8;
+  --hover: rgba(20, 32, 54, 0.05);
+  /* Accent in the house blue range, oklch(0.62 0.14 240). */
+  --accent: #2f6fed;
+  --accent-hover: #2560d6;
+  --accent-press: #1f53bd;
+  --shadow: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.05);
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: var(--font-jakarta);
+  --font-mono: var(--font-mono);
 }
 
 body {
-  background:
-    radial-gradient(60rem 60rem at 80% -10%, rgba(99, 102, 241, 0.12), transparent 60%),
-    radial-gradient(50rem 50rem at -10% 10%, rgba(16, 185, 129, 0.08), transparent 55%),
-    var(--background);
+  background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  font-weight: 500;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 {
+  letter-spacing: -0.02em;
+}
+
+/* Press micro-interaction. No glow, no scale-up, just a subtle settle. */
+.btn-anim {
+  transition: background-color 0.15s ease, border-color 0.15s ease, transform 0.06s ease;
+}
+.btn-anim:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+/* Card shadow utility, Stripe-like subtlety. */
+.shadow-card {
+  box-shadow: var(--shadow);
+}
+
+.shadow-float {
+  box-shadow:
+    0 16px 40px rgba(16, 24, 40, 0.1),
+    0 4px 12px rgba(16, 24, 40, 0.06);
+}
+
+/* Hover lift for interactive cards. */
+.lift {
+  transition:
+    transform 0.22s cubic-bezier(0.22, 0.7, 0.2, 1),
+    box-shadow 0.22s ease,
+    border-color 0.22s ease;
+}
+.lift:hover {
+  transform: translateY(-3px);
+  box-shadow:
+    0 12px 28px rgba(16, 24, 40, 0.1),
+    0 3px 8px rgba(16, 24, 40, 0.06);
+}
+
+/* Slow float for the hero preview, subtle. */
+@keyframes floaty {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-7px); }
+}
+.floaty {
+  animation: floaty 6s ease-in-out infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .floaty { animation: none; }
+}
+
+/* Thin, unobtrusive scrollbars. */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-strong) transparent;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Entrance + scroll-reveal motion. Restrained: short, eased, no bounce. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.reveal {
+  opacity: 0;
+}
+.reveal.in {
+  animation: rise 0.7s cubic-bezier(0.22, 0.7, 0.2, 1) forwards;
+}
+
+.rise-in {
+  animation: rise 0.7s cubic-bezier(0.22, 0.7, 0.2, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .reveal,
+  .reveal.in,
+  .rise-in {
+    animation: none;
+    opacity: 1;
+  }
+}
+
+/* Soft accent wash for section dividers, no harsh gradients on text. */
+.section-tint {
+  background:
+    radial-gradient(40rem 24rem at 50% -10%, rgba(47, 111, 237, 0.06), transparent 70%);
 }
